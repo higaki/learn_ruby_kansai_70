@@ -19,20 +19,20 @@ if $0 == __FILE__
   require 'test/unit'
   class TestMyMap < Test::Unit::TestCase
     def setup
-      @array = [*0..9]
+      @fixture = [*0..9]
     end
 
     def test_with_block
-      assert_equal @array.map{|i| i * 2}, @array.my_map{|i| i * 2}
+      assert_equal @fixture.map{|i| i * 2}, @fixture.my_map{|i| i * 2}
     end
 
     def test_with_proc
-      assert_equal @array.map(&:to_s), @array.my_map(&:to_s)
+      assert_equal @fixture.map(&:to_s), @fixture.my_map(&:to_s)
     end
 
     def test_without_block
-      actual = @array.my_map
-      @array.each do |expected|
+      actual = @fixture.my_map
+      @fixture.each do |expected|
         assert_equal expected, actual.next
       end
       assert_raise StopIteration do
@@ -41,33 +41,52 @@ if $0 == __FILE__
     end
   end
 
-  class TestMyMapByEmpty < Test::Unit::TestCase
+  class TestMyMapByHash < TestMyMap
     def setup
-      @array = []
+      @fixture = {matz: 50, dhh: 36}
     end
 
     def test_with_block
-      assert_equal [], @array.my_map{|i| i * 2}
+      super
     end
 
     def test_with_proc
-      assert_equal [], @array.my_map(&:to_s)
+      super
+    end
+
+    def test_without_block
+      super
+    end
+  end
+
+  class TestMyMapByEmpty < TestMyMap
+    def setup
+      @fixture = []
+    end
+
+    def test_with_block
+      super
+    end
+
+    def test_with_proc
+      super
     end
 
     def test_without_block
       assert_raise StopIteration do
-        @array.my_map.next
+        @fixture.my_map.next
       end
     end
   end
 end
+
 # >> Loaded suite -
 # >> Started
-# >> ......
+# >> .........
 # >> 
-# >> Finished in 0.001017 seconds.
+# >> Finished in 0.001736 seconds.
 # >> ------
-# >> 6 tests, 16 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
+# >> 9 tests, 21 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
 # >> 100% passed
 # >> ------
-# >> 5899.71 tests/s, 15732.55 assertions/s
+# >> 5184.33 tests/s, 12096.77 assertions/s
